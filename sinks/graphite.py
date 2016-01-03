@@ -4,6 +4,7 @@ Supports flushing metrics to graphite
 import sys
 import socket
 import logging
+import time
 
 
 class GraphiteStore(object):
@@ -90,6 +91,8 @@ class GraphiteStore(object):
                     return
                 except socket.error:
                     self.logger.exception("Error while flushing to graphite. Reattempting...")
+                    self.sock.close()
+                    time.sleep(0.5)
 
             self.sock = self._create_socket()
 
